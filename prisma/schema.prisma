@@ -1,0 +1,63 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model ChatRoom {
+  id Int @id @default(autoincrement())
+  code String @unique @db.Char(14)
+  name String @db.VarChar(30)
+  members RoomMember[]
+  status ChatRoomStatus @default(Open)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("chat-rooms")
+}
+
+
+model RoomMember {
+  id String @id
+  roomId Int
+  room ChatRoom @relation(fields: [roomId],references: [id],onDelete: Cascade)
+  name String? @db.VarChar(20)
+  avatarId Int
+  avatar Avatar @relation(fields: [avatarId],references: [id],onDelete: Cascade)
+  isAnonymous Boolean
+  status RoomMemberStatus @default(Active)
+  joinedAt DateTime @default(now())
+  @@map("room-members")
+}
+
+
+model Avatar {
+  id Int @id @default(autoincrement())
+  url String
+  status AvatarStatus
+  members RoomMember[]
+  @@map("Avatars")
+}
+
+enum  ChatRoomStatus {
+ Open
+ Closed
+}
+
+
+enum RoomMemberStatus {
+  Active
+  Inactive
+}
+
+enum AvatarStatus {
+  Active
+  Inactive
+  Deleted
+}
