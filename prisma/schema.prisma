@@ -11,28 +11,36 @@ datasource db {
 }
 
 
-model ChatRoom {
+model Room {
   id Int @id @default(autoincrement())
-  code String @unique @db.Char(14)
+  code String @unique @db.Char(12)
   name String @db.VarChar(30)
+  photoId Int 
+  photo RoomPhoto @relation(fields: [photoId],references: [id])  
   members RoomMember[]
-  status ChatRoomStatus @default(Open)
+  joinRequests RoomJoinRequest[]
+  messages Message[]
+  status RoomStatus @default(Open)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@map("chat-rooms")
+  @@map("rooms")
 }
 
 
 model RoomMember {
-  id String @id
+  id Int @id @default(autoincrement())
   roomId Int
-  room ChatRoom @relation(fields: [roomId],references: [id],onDelete: Cascade)
+  room Room @relation(fields: [roomId],references: [id],onDelete: Cascade)
+  userId String 
   name String? @db.VarChar(20)
   avatarId Int
-  avatar Avatar @relation(fields: [avatarId],references: [id],onDelete: Cascade)
-  isAnonymous Boolean
+  avatar Avatar @relation(fields: [avatarId],references: [id])
+  isAnonymous Boolean @default(false)
+  role RoomMemberRole
+  messages Message[]
   status RoomMemberStatus @default(Active)
   joinedAt DateTime @default(now())
+  @@unique([id,userId])
   @@map("room-members")
 }
 
@@ -42,14 +50,56 @@ model Avatar {
   url String
   status AvatarStatus
   members RoomMember[]
-  @@map("Avatars")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("avatars")
 }
 
-enum  ChatRoomStatus {
+model RoomPhoto {
+  id Int @id @default(autoincrement())
+  url String
+  status RoomPhotoStatus
+  rooms Room[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("room-photos")
+}
+
+model RoomJoinRequest {
+  id Int @id @default(autoincrement())
+  userId  Int
+  roomId Int
+  room Room @relation(fields: [roomId],references: [id],onDelete: Cascade)
+  status RoomJoinRequestStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("room-join-requests")
+}
+
+
+model  Message {
+   id Int @id @default(autoincrement())
+   roomId Int
+   room Room @relation(fields: [roomId],references: [id],onDelete: Cascade)
+   memberId Int
+   member RoomMember @relation(fields: [memberId],references: [id],onDelete: Cascade)
+   text String
+   contentType MessageContentType
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+   @@map("messages")
+}
+
+
+enum  RoomStatus {
  Open
  Closed
 }
 
+enum RoomMemberRole {
+   Owner 
+   Member
+}
 
 enum RoomMemberStatus {
   Active
@@ -61,3 +111,23 @@ enum AvatarStatus {
   Inactive
   Deleted
 }
+
+enum RoomPhotoStatus {
+  Active
+  Inactive
+  Deleted
+}
+
+enum RoomJoinRequestStatus {
+  Approve
+  Declined
+  Canceled
+  Timeout
+}
+
+
+enum MessageContentType {
+  Text
+  Media
+}
+
