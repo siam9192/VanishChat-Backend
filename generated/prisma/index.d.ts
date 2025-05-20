@@ -91,6 +91,7 @@ export type RoomPhotoStatus = (typeof RoomPhotoStatus)[keyof typeof RoomPhotoSta
 
 
 export const RoomJoinRequestStatus: {
+  Pending: 'Pending',
   Approve: 'Approve',
   Declined: 'Declined',
   Canceled: 'Canceled',
@@ -7307,6 +7308,7 @@ export namespace Prisma {
     memberId: number | null
     text: string | null
     contentType: $Enums.MessageContentType | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7317,6 +7319,7 @@ export namespace Prisma {
     memberId: number | null
     text: string | null
     contentType: $Enums.MessageContentType | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7327,6 +7330,7 @@ export namespace Prisma {
     memberId: number
     text: number
     contentType: number
+    isDeleted: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7351,6 +7355,7 @@ export namespace Prisma {
     memberId?: true
     text?: true
     contentType?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7361,6 +7366,7 @@ export namespace Prisma {
     memberId?: true
     text?: true
     contentType?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7371,6 +7377,7 @@ export namespace Prisma {
     memberId?: true
     text?: true
     contentType?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7468,6 +7475,7 @@ export namespace Prisma {
     memberId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted: boolean | null
     createdAt: Date
     updatedAt: Date
     _count: MessageCountAggregateOutputType | null
@@ -7497,6 +7505,7 @@ export namespace Prisma {
     memberId?: boolean
     text?: boolean
     contentType?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     room?: boolean | RoomDefaultArgs<ExtArgs>
@@ -7509,6 +7518,7 @@ export namespace Prisma {
     memberId?: boolean
     text?: boolean
     contentType?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     room?: boolean | RoomDefaultArgs<ExtArgs>
@@ -7521,6 +7531,7 @@ export namespace Prisma {
     memberId?: boolean
     text?: boolean
     contentType?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     room?: boolean | RoomDefaultArgs<ExtArgs>
@@ -7533,11 +7544,12 @@ export namespace Prisma {
     memberId?: boolean
     text?: boolean
     contentType?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roomId" | "memberId" | "text" | "contentType" | "createdAt" | "updatedAt", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roomId" | "memberId" | "text" | "contentType" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     room?: boolean | RoomDefaultArgs<ExtArgs>
     member?: boolean | RoomMemberDefaultArgs<ExtArgs>
@@ -7563,6 +7575,7 @@ export namespace Prisma {
       memberId: number
       text: string
       contentType: $Enums.MessageContentType
+      isDeleted: boolean | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["message"]>
@@ -7995,6 +8008,7 @@ export namespace Prisma {
     readonly memberId: FieldRef<"Message", 'Int'>
     readonly text: FieldRef<"Message", 'String'>
     readonly contentType: FieldRef<"Message", 'MessageContentType'>
+    readonly isDeleted: FieldRef<"Message", 'Boolean'>
     readonly createdAt: FieldRef<"Message", 'DateTime'>
     readonly updatedAt: FieldRef<"Message", 'DateTime'>
   }
@@ -8493,6 +8507,7 @@ export namespace Prisma {
     memberId: 'memberId',
     text: 'text',
     contentType: 'contentType',
+    isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -9038,6 +9053,7 @@ export namespace Prisma {
     memberId?: IntFilter<"Message"> | number
     text?: StringFilter<"Message"> | string
     contentType?: EnumMessageContentTypeFilter<"Message"> | $Enums.MessageContentType
+    isDeleted?: BoolNullableFilter<"Message"> | boolean | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
     updatedAt?: DateTimeFilter<"Message"> | Date | string
     room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
@@ -9050,6 +9066,7 @@ export namespace Prisma {
     memberId?: SortOrder
     text?: SortOrder
     contentType?: SortOrder
+    isDeleted?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     room?: RoomOrderByWithRelationInput
@@ -9065,6 +9082,7 @@ export namespace Prisma {
     memberId?: IntFilter<"Message"> | number
     text?: StringFilter<"Message"> | string
     contentType?: EnumMessageContentTypeFilter<"Message"> | $Enums.MessageContentType
+    isDeleted?: BoolNullableFilter<"Message"> | boolean | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
     updatedAt?: DateTimeFilter<"Message"> | Date | string
     room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
@@ -9077,6 +9095,7 @@ export namespace Prisma {
     memberId?: SortOrder
     text?: SortOrder
     contentType?: SortOrder
+    isDeleted?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MessageCountOrderByAggregateInput
@@ -9095,6 +9114,7 @@ export namespace Prisma {
     memberId?: IntWithAggregatesFilter<"Message"> | number
     text?: StringWithAggregatesFilter<"Message"> | string
     contentType?: EnumMessageContentTypeWithAggregatesFilter<"Message"> | $Enums.MessageContentType
+    isDeleted?: BoolNullableWithAggregatesFilter<"Message"> | boolean | null
     createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
   }
@@ -9262,7 +9282,7 @@ export namespace Prisma {
 
   export type AvatarCreateInput = {
     url: string
-    status: $Enums.AvatarStatus
+    status?: $Enums.AvatarStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: RoomMemberCreateNestedManyWithoutAvatarInput
@@ -9271,7 +9291,7 @@ export namespace Prisma {
   export type AvatarUncheckedCreateInput = {
     id?: number
     url: string
-    status: $Enums.AvatarStatus
+    status?: $Enums.AvatarStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: RoomMemberUncheckedCreateNestedManyWithoutAvatarInput
@@ -9297,7 +9317,7 @@ export namespace Prisma {
   export type AvatarCreateManyInput = {
     id?: number
     url: string
-    status: $Enums.AvatarStatus
+    status?: $Enums.AvatarStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9319,7 +9339,7 @@ export namespace Prisma {
 
   export type RoomPhotoCreateInput = {
     url: string
-    status: $Enums.RoomPhotoStatus
+    status?: $Enums.RoomPhotoStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     rooms?: RoomCreateNestedManyWithoutPhotoInput
@@ -9328,7 +9348,7 @@ export namespace Prisma {
   export type RoomPhotoUncheckedCreateInput = {
     id?: number
     url: string
-    status: $Enums.RoomPhotoStatus
+    status?: $Enums.RoomPhotoStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     rooms?: RoomUncheckedCreateNestedManyWithoutPhotoInput
@@ -9354,7 +9374,7 @@ export namespace Prisma {
   export type RoomPhotoCreateManyInput = {
     id?: number
     url: string
-    status: $Enums.RoomPhotoStatus
+    status?: $Enums.RoomPhotoStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9376,7 +9396,7 @@ export namespace Prisma {
 
   export type RoomJoinRequestCreateInput = {
     userId: number
-    status: $Enums.RoomJoinRequestStatus
+    status?: $Enums.RoomJoinRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     room: RoomCreateNestedOneWithoutJoinRequestsInput
@@ -9386,7 +9406,7 @@ export namespace Prisma {
     id?: number
     userId: number
     roomId: number
-    status: $Enums.RoomJoinRequestStatus
+    status?: $Enums.RoomJoinRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9412,7 +9432,7 @@ export namespace Prisma {
     id?: number
     userId: number
     roomId: number
-    status: $Enums.RoomJoinRequestStatus
+    status?: $Enums.RoomJoinRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9436,6 +9456,7 @@ export namespace Prisma {
   export type MessageCreateInput = {
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     room: RoomCreateNestedOneWithoutMessagesInput
@@ -9448,6 +9469,7 @@ export namespace Prisma {
     memberId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9455,6 +9477,7 @@ export namespace Prisma {
   export type MessageUpdateInput = {
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     room?: RoomUpdateOneRequiredWithoutMessagesNestedInput
@@ -9467,6 +9490,7 @@ export namespace Prisma {
     memberId?: IntFieldUpdateOperationsInput | number
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9477,6 +9501,7 @@ export namespace Prisma {
     memberId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9484,6 +9509,7 @@ export namespace Prisma {
   export type MessageUpdateManyMutationInput = {
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9494,6 +9520,7 @@ export namespace Prisma {
     memberId?: IntFieldUpdateOperationsInput | number
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9994,6 +10021,11 @@ export namespace Prisma {
     not?: NestedEnumMessageContentTypeFilter<$PrismaModel> | $Enums.MessageContentType
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type RoomMemberScalarRelationFilter = {
     is?: RoomMemberWhereInput
     isNot?: RoomMemberWhereInput
@@ -10005,6 +10037,7 @@ export namespace Prisma {
     memberId?: SortOrder
     text?: SortOrder
     contentType?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10021,6 +10054,7 @@ export namespace Prisma {
     memberId?: SortOrder
     text?: SortOrder
     contentType?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10031,6 +10065,7 @@ export namespace Prisma {
     memberId?: SortOrder
     text?: SortOrder
     contentType?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10049,6 +10084,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMessageContentTypeFilter<$PrismaModel>
     _max?: NestedEnumMessageContentTypeFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type RoomPhotoCreateNestedOneWithoutRoomsInput = {
@@ -10423,6 +10466,10 @@ export namespace Prisma {
     set?: $Enums.MessageContentType
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type RoomUpdateOneRequiredWithoutMessagesNestedInput = {
     create?: XOR<RoomCreateWithoutMessagesInput, RoomUncheckedCreateWithoutMessagesInput>
     connectOrCreate?: RoomCreateOrConnectWithoutMessagesInput
@@ -10697,6 +10744,11 @@ export namespace Prisma {
     not?: NestedEnumMessageContentTypeFilter<$PrismaModel> | $Enums.MessageContentType
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedEnumMessageContentTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.MessageContentType | EnumMessageContentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.MessageContentType[] | ListEnumMessageContentTypeFieldRefInput<$PrismaModel>
@@ -10707,9 +10759,17 @@ export namespace Prisma {
     _max?: NestedEnumMessageContentTypeFilter<$PrismaModel>
   }
 
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type RoomPhotoCreateWithoutRoomsInput = {
     url: string
-    status: $Enums.RoomPhotoStatus
+    status?: $Enums.RoomPhotoStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10717,7 +10777,7 @@ export namespace Prisma {
   export type RoomPhotoUncheckedCreateWithoutRoomsInput = {
     id?: number
     url: string
-    status: $Enums.RoomPhotoStatus
+    status?: $Enums.RoomPhotoStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10762,7 +10822,7 @@ export namespace Prisma {
 
   export type RoomJoinRequestCreateWithoutRoomInput = {
     userId: number
-    status: $Enums.RoomJoinRequestStatus
+    status?: $Enums.RoomJoinRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10770,7 +10830,7 @@ export namespace Prisma {
   export type RoomJoinRequestUncheckedCreateWithoutRoomInput = {
     id?: number
     userId: number
-    status: $Enums.RoomJoinRequestStatus
+    status?: $Enums.RoomJoinRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10788,6 +10848,7 @@ export namespace Prisma {
   export type MessageCreateWithoutRoomInput = {
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     member: RoomMemberCreateNestedOneWithoutMessagesInput
@@ -10798,6 +10859,7 @@ export namespace Prisma {
     memberId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10922,6 +10984,7 @@ export namespace Prisma {
     memberId?: IntFilter<"Message"> | number
     text?: StringFilter<"Message"> | string
     contentType?: EnumMessageContentTypeFilter<"Message"> | $Enums.MessageContentType
+    isDeleted?: BoolNullableFilter<"Message"> | boolean | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
     updatedAt?: DateTimeFilter<"Message"> | Date | string
   }
@@ -10956,7 +11019,7 @@ export namespace Prisma {
 
   export type AvatarCreateWithoutMembersInput = {
     url: string
-    status: $Enums.AvatarStatus
+    status?: $Enums.AvatarStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10964,7 +11027,7 @@ export namespace Prisma {
   export type AvatarUncheckedCreateWithoutMembersInput = {
     id?: number
     url: string
-    status: $Enums.AvatarStatus
+    status?: $Enums.AvatarStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10977,6 +11040,7 @@ export namespace Prisma {
   export type MessageCreateWithoutMemberInput = {
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     room: RoomCreateNestedOneWithoutMessagesInput
@@ -10987,6 +11051,7 @@ export namespace Prisma {
     roomId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11388,7 +11453,7 @@ export namespace Prisma {
   export type RoomJoinRequestCreateManyRoomInput = {
     id?: number
     userId: number
-    status: $Enums.RoomJoinRequestStatus
+    status?: $Enums.RoomJoinRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11398,6 +11463,7 @@ export namespace Prisma {
     memberId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11462,6 +11528,7 @@ export namespace Prisma {
   export type MessageUpdateWithoutRoomInput = {
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: RoomMemberUpdateOneRequiredWithoutMessagesNestedInput
@@ -11472,6 +11539,7 @@ export namespace Prisma {
     memberId?: IntFieldUpdateOperationsInput | number
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11481,6 +11549,7 @@ export namespace Prisma {
     memberId?: IntFieldUpdateOperationsInput | number
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11490,6 +11559,7 @@ export namespace Prisma {
     roomId: number
     text: string
     contentType: $Enums.MessageContentType
+    isDeleted?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11497,6 +11567,7 @@ export namespace Prisma {
   export type MessageUpdateWithoutMemberInput = {
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     room?: RoomUpdateOneRequiredWithoutMessagesNestedInput
@@ -11507,6 +11578,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11516,6 +11588,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     text?: StringFieldUpdateOperationsInput | string
     contentType?: EnumMessageContentTypeFieldUpdateOperationsInput | $Enums.MessageContentType
+    isDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

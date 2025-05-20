@@ -48,7 +48,7 @@ model RoomMember {
 model Avatar {
   id Int @id @default(autoincrement())
   url String
-  status AvatarStatus
+  status AvatarStatus @default(Active)
   members RoomMember[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -58,7 +58,7 @@ model Avatar {
 model RoomPhoto {
   id Int @id @default(autoincrement())
   url String
-  status RoomPhotoStatus
+  status RoomPhotoStatus @default(Active)
   rooms Room[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,7 +70,7 @@ model RoomJoinRequest {
   userId  Int
   roomId Int
   room Room @relation(fields: [roomId],references: [id],onDelete: Cascade)
-  status RoomJoinRequestStatus
+  status RoomJoinRequestStatus @default(Pending)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("room-join-requests")
@@ -85,6 +85,7 @@ model  Message {
    member RoomMember @relation(fields: [memberId],references: [id],onDelete: Cascade)
    text String
    contentType MessageContentType
+   isDeleted Boolean? @default(false)
    createdAt DateTime @default(now())
    updatedAt DateTime @updatedAt
    @@map("messages")
@@ -119,6 +120,7 @@ enum RoomPhotoStatus {
 }
 
 enum RoomJoinRequestStatus {
+  Pending
   Approve
   Declined
   Canceled

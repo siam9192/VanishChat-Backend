@@ -14,7 +14,7 @@ CREATE TYPE "AvatarStatus" AS ENUM ('Active', 'Inactive', 'Deleted');
 CREATE TYPE "RoomPhotoStatus" AS ENUM ('Active', 'Inactive', 'Deleted');
 
 -- CreateEnum
-CREATE TYPE "RoomJoinRequestStatus" AS ENUM ('Approve', 'Declined', 'Canceled', 'Timeout');
+CREATE TYPE "RoomJoinRequestStatus" AS ENUM ('Pending', 'Approve', 'Declined', 'Canceled', 'Timeout');
 
 -- CreateEnum
 CREATE TYPE "MessageContentType" AS ENUM ('Text', 'Media');
@@ -51,7 +51,7 @@ CREATE TABLE "room-members" (
 CREATE TABLE "avatars" (
     "id" SERIAL NOT NULL,
     "url" TEXT NOT NULL,
-    "status" "AvatarStatus" NOT NULL,
+    "status" "AvatarStatus" NOT NULL DEFAULT 'Active',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -62,7 +62,7 @@ CREATE TABLE "avatars" (
 CREATE TABLE "room-photos" (
     "id" SERIAL NOT NULL,
     "url" TEXT NOT NULL,
-    "status" "RoomPhotoStatus" NOT NULL,
+    "status" "RoomPhotoStatus" NOT NULL DEFAULT 'Active',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -74,7 +74,7 @@ CREATE TABLE "room-join-requests" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "roomId" INTEGER NOT NULL,
-    "status" "RoomJoinRequestStatus" NOT NULL,
+    "status" "RoomJoinRequestStatus" NOT NULL DEFAULT 'Pending',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -88,6 +88,7 @@ CREATE TABLE "messages" (
     "memberId" INTEGER NOT NULL,
     "text" TEXT NOT NULL,
     "contentType" "MessageContentType" NOT NULL,
+    "isDeleted" BOOLEAN DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

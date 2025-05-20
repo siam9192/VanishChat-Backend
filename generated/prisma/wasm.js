@@ -173,6 +173,7 @@ exports.Prisma.MessageScalarFieldEnum = {
   memberId: 'memberId',
   text: 'text',
   contentType: 'contentType',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -219,6 +220,7 @@ exports.RoomPhotoStatus = exports.$Enums.RoomPhotoStatus = {
 };
 
 exports.RoomJoinRequestStatus = exports.$Enums.RoomJoinRequestStatus = {
+  Pending: 'Pending',
   Approve: 'Approve',
   Declined: 'Declined',
   Canceled: 'Canceled',
