@@ -9,3 +9,13 @@ export interface IRoomPhoto {
   createdAt:Date
   updatedAt:Date
 }
+
+
+
+export interface ICreateRoomPhotoPayload{
+    url:string
+}
+
+export interface ICreateManyRoomPhotoPayload {
+  urls:string[]
+}

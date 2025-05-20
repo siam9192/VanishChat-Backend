@@ -13,7 +13,7 @@ class AvatarController {
     });
   });
  createManyAvatar = catchAsync(async (req, res) => {
-    const result = await avatarService.createAvatarIntoDB(req.body);
+    const result = await avatarService.createManyAvatarIntoDB(req.body);
     sendSuccessResponse(res, {
       message: 'Avatars  created successfully!',
       statusCode: httpStatus.CREATED,
