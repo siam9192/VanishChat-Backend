@@ -1,10 +1,10 @@
-import httpStatus from "../../shared/http-status";
-import catchAsync from "../../utils/catchAsync";
-import { sendSuccessResponse } from "../../utils/response";
-import roomPhotoService from "./room-photo-service";
+import httpStatus from '../../shared/http-status';
+import catchAsync from '../../utils/catchAsync';
+import { sendSuccessResponse } from '../../utils/response';
+import roomPhotoService from './room-photo-service';
 
 class RoomPhotoController {
-    createRoomPhoto = catchAsync(async (req, res) => {
+  createRoomPhoto = catchAsync(async (req, res) => {
     const result = await roomPhotoService.createRoomPhotoIntoDB(req.body);
     sendSuccessResponse(res, {
       message: 'Room photo created successfully!',
@@ -12,7 +12,7 @@ class RoomPhotoController {
       data: result,
     });
   });
- createManyRoomPhoto = catchAsync(async (req, res) => {
+  createManyRoomPhoto = catchAsync(async (req, res) => {
     const result = await roomPhotoService.createManyRoomPhotoIntoDB(req.body);
     sendSuccessResponse(res, {
       message: 'Room photos  created successfully!',
@@ -30,7 +30,7 @@ class RoomPhotoController {
     });
   });
 
-    getRoomPhotoById = catchAsync(async (req, res) => {
+  getRoomPhotoById = catchAsync(async (req, res) => {
     const result = await roomPhotoService.getRoomPhotoByIdFromDB(req.params.id);
     sendSuccessResponse(res, {
       message: 'Room photo retrieved   successfully!',
@@ -40,5 +40,4 @@ class RoomPhotoController {
   });
 }
 
-
-export default new RoomPhotoController()
+export default new RoomPhotoController();

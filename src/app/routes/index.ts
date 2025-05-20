@@ -1,19 +1,24 @@
-import { IRouter, Router } from "express";
-import avatarRouter from "../modules/avatar/avatar.route";
-import roomPhotoRouter from "../modules/RoomPhoto/room-photo.route";
+import { IRouter, Router } from 'express';
+import avatarRouter from '../modules/avatar/avatar.route';
+import roomPhotoRouter from '../modules/RoomPhoto/room-photo.route';
+import roomRouter from '../modules/Room/room.route';
 
 type TModuleRoutes = { path: string; router: IRouter }[];
 const router = Router();
 const moduleRoutes: TModuleRoutes = [
-    {
-        path:'/avatars',
-        router:avatarRouter
-    },
-     {
-        path:'/room-photos',
-        router:roomPhotoRouter
-    }
-]
+  {
+    path: '/avatars',
+    router: avatarRouter,
+  },
+  {
+    path: '/room-photos',
+    router: roomPhotoRouter,
+  },
+   {
+    path: '/rooms',
+    router: roomRouter,
+  },
+];
 
 const routes = moduleRoutes.map((route) => router.use(route.path, route.router));
 

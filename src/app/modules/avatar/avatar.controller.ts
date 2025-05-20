@@ -1,10 +1,10 @@
-import httpStatus from "../../shared/http-status";
-import catchAsync from "../../utils/catchAsync";
-import { sendSuccessResponse } from "../../utils/response";
-import avatarService from "./avatar.service";
+import httpStatus from '../../shared/http-status';
+import catchAsync from '../../utils/catchAsync';
+import { sendSuccessResponse } from '../../utils/response';
+import avatarService from './avatar.service';
 
 class AvatarController {
-    createAvatar = catchAsync(async (req, res) => {
+  createAvatar = catchAsync(async (req, res) => {
     const result = await avatarService.createAvatarIntoDB(req.body);
     sendSuccessResponse(res, {
       message: 'Avatar created successfully!',
@@ -12,7 +12,7 @@ class AvatarController {
       data: result,
     });
   });
- createManyAvatar = catchAsync(async (req, res) => {
+  createManyAvatar = catchAsync(async (req, res) => {
     const result = await avatarService.createManyAvatarIntoDB(req.body);
     sendSuccessResponse(res, {
       message: 'Avatars  created successfully!',
@@ -30,7 +30,7 @@ class AvatarController {
     });
   });
 
-    getAvatarById = catchAsync(async (req, res) => {
+  getAvatarById = catchAsync(async (req, res) => {
     const result = await avatarService.getAvatarByIdFromDB(req.params.id);
     sendSuccessResponse(res, {
       message: 'Avatar retrieved   successfully!',
@@ -40,5 +40,4 @@ class AvatarController {
   });
 }
 
-
-export default new AvatarController
+export default new AvatarController();

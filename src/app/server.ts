@@ -1,9 +1,9 @@
-import app, { server } from "./app";
+import app, { server } from './app';
 
-function main (){
-     server.listen(7000,()=>{
-       console.log("Server is running")
-     })
+function main() {
+  server.listen(7000, () => {
+    console.log('Server is running');
+  });
 }
 
-main()
+main();
