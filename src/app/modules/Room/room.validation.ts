@@ -5,7 +5,7 @@ const createRoom = z.object({
   photoId: z.number().int(),
   user: z.object({
     name: z.string({required_error:"user name is required"}).nonempty().max(30).optional(),
-    avatarId: z.number().optional(),
+    avatarId: z.number().int(),
     isAnonymous: z.boolean(),
   }),
 })

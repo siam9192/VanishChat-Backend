@@ -12,7 +12,7 @@ router.post('/',auth(),validateRequest(roomValidation.createRoom),roomController
 
 router.get('/public/:code',roomController.getPublicRoomByCode)
 
-router.get('/:code',auth(),roomController.getRoomById)
+router.get('/:code',auth(),roomController.getRoomByCode)
 
 
 

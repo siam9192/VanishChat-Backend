@@ -1,10 +1,11 @@
+import { Request, Response } from 'express';
 import httpStatus from '../../shared/http-status';
 import catchAsync from '../../utils/catchAsync';
 import { sendSuccessResponse } from '../../utils/response';
 import roomService from './room.service';
 
 class RoomController {
-  createRoom = catchAsync(async (req, res) => {
+  createRoom = catchAsync(async (req:Request, res:Response) => {
     const result = await roomService.createRoomIntoDB(req.user, req.body);
     sendSuccessResponse(res, {
       message: 'Room  created successfully!',
@@ -22,8 +23,8 @@ class RoomController {
     });
   });
 
-  getRoomById = catchAsync(async (req, res) => {
-    const result = await roomService.getRoomByCodeFromDB(req.user, req.params.id);
+  getRoomByCode = catchAsync(async (req, res) => {
+    const result = await roomService.getRoomByCodeFromDB(req.user, req.params.code);
     sendSuccessResponse(res, {
       message: 'Room  retrieved   successfully!',
       statusCode: httpStatus.OK,

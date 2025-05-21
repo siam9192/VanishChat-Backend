@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { RoomMemberRole, RoomStatus } from '../../../../generated/prisma';
+import { RoomJoinRequestStatus, RoomMemberRole, RoomStatus } from '../../../../generated/prisma';
 import AppError from '../../Errors/AppError';
 import prisma from '../../prisma';
 import httpStatus from '../../shared/http-status';
 import { IAuthUser } from '../../utils/type';
 import { ICreateRoomPayload } from './room.interface';
-
+import {generateCode}  from '../../helpers'
 class RoomService {
   async createRoomIntoDB(authUser: IAuthUser, payload: ICreateRoomPayload) {
     const roomPhotoExist = await prisma.roomPhoto.findUnique({
@@ -23,11 +23,11 @@ class RoomService {
     if (!avatarExist) throw new AppError(httpStatus.NOT_FOUND, 'Avatar  not found');
 
     let code = generateCode();
-
     // Generate unique code
-    while (!(await prisma.room.findUnique({ where: { code } }))) {
+    while (await prisma.room.findUnique({ where: { code } })) {
       code = generateCode();
     }
+    
 
     const result = await prisma.$transaction(async (txClient) => {
       const roomData = {
@@ -41,6 +41,7 @@ class RoomService {
         data: roomData,
       });
 
+     
       //   Create  1st room member  as owner role
       const user = payload.user;
       const memberData: Record<string, unknown> = {
@@ -52,12 +53,12 @@ class RoomService {
       if (user.isAnonymous) {
         memberData.isAnonymous = true;
       } else {
-        user.name = user.name;
+        memberData.name = user.name;
       }
       memberData.avatarId = user.avatarId;
 
       await txClient.roomMember.create({
-        data: memberData,
+        data: memberData as any,
       });
       return createdRoom;
     });
@@ -65,21 +66,29 @@ class RoomService {
     return result;
   }
   async getPublicRoomByCodeFromDB(code: string) {
-    if (
-      !z
-        .string()
-        .regex(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)
-        .safeParse(code).success
-    ) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Invalid room code');
-    }
+    // if (
+    //   !z
+    //     .string()
+    //     .regex(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)
+    //     .safeParse(code).success
+    // ) {
+    //   throw new AppError(httpStatus.BAD_REQUEST, 'Invalid room code');
+    // }
 
+    // const roomCode =  code.replace('-','')
+     if(code.length !== 12){
+      throw new AppError(httpStatus.BAD_REQUEST,"Invalid room code")
+     }
     const room = await prisma.room.findUnique({
       where: {
-        code,
+        code:code,
         status: RoomStatus.Open,
       },
+      include:{
+        photo:true
+      }
     });
+
 
     if (!room) {
       throw new AppError(httpStatus.NOT_FOUND, 'Room not found');
@@ -87,22 +96,59 @@ class RoomService {
     return room;
   }
   async getRoomByCodeFromDB(authUser: IAuthUser, code: string) {
-    if (
-      !z
-        .string()
-        .regex(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)
-        .safeParse(code).success
-    ) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Invalid room code');
+    // if (
+    //   !z
+    //     .string()
+    //     .regex(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)
+    //     .safeParse(code).success
+    // ) {
+    //   throw new AppError(httpStatus.BAD_REQUEST, 'Invalid room code');
+    // }
+     if(code.length !== 12){
+      throw new AppError(httpStatus.BAD_REQUEST,"Invalid room code")
+     }
+    const isMember = await prisma.roomMember.findFirst({
+      where:{
+        userId:authUser.id,
+        room:{
+          code
+        }
+      }
+    }) 
+    
+    if(!isMember){
+      throw new AppError(httpStatus.FORBIDDEN,"Not possible")
     }
-
+  
     const room = await prisma.room.findUnique({
       where: {
         code,
       },
+      include:{
+        photo:true,
+        members:{
+          include:{
+            avatar:true
+          }
+        },
+        joinRequests:{
+          where:{
+            status:RoomJoinRequestStatus.Pending
+          },
+          include:{
+            avatar:true
+          }
+        }
+      },
+      
     });
 
-    return room;
+    const isOwner =  room?.members.find(_=>_.userId === authUser.id)?.role === RoomMemberRole.Owner
+  
+    return {
+      ...room,
+      isOwner
+    };
   }
 }
 

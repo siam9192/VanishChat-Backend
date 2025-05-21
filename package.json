@@ -13,12 +13,13 @@
     "express": "^5.1.0",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
+    "prettier": "prettier --ignore-path .gitignore --write \"src/app/**/*.{ts,json}\"",
     "socket.io": "^4.8.1",
     "ts-node-dev": "^2.0.0",
-    "zod": "^3.25.7",
-    "prettier": "prettier --ignore-path .gitignore --write \"./src/app/**/*.+(ts|json)\""
+    "uuid": "^11.1.0",
+    "zod": "^3.25.7"
   },
   "scripts": {
-    "dev": "tsnd --respawn ./src/app/server.ts"
+    "dev": "ts-node-dev --respawn --transpile-only ./src/app/server.ts"
   }
 }

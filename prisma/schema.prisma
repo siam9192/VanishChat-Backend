@@ -50,6 +50,7 @@ model Avatar {
   url String
   status AvatarStatus @default(Active)
   members RoomMember[]
+  joinRequests RoomJoinRequest[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("avatars")
@@ -69,6 +70,10 @@ model RoomJoinRequest {
   id Int @id @default(autoincrement())
   userId  Int
   roomId Int
+  name String? @db.VarChar(20)
+  avatarId Int
+  avatar Avatar @relation(fields: [avatarId],references: [id])
+  isAnonymous Boolean @default(false)
   room Room @relation(fields: [roomId],references: [id],onDelete: Cascade)
   status RoomJoinRequestStatus @default(Pending)
   createdAt DateTime @default(now())

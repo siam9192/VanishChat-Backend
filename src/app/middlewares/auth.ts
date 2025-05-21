@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
-
 import AppError from '../Errors/AppError';
-
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import httpStatus from '../shared/http-status';
 import envConfig from '../config/env.config';
@@ -27,8 +25,7 @@ function auth() {
     }
 
     const { role, userId, iat } = decoded;
-
-    req.user = decoded;
+    req .user = decoded;
 
     next();
   });
