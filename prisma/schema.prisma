@@ -32,6 +32,7 @@ model RoomMember {
   roomId Int
   room Room @relation(fields: [roomId],references: [id],onDelete: Cascade)
   userId String 
+  socketId String? 
   name String? @db.VarChar(20)
   avatarId Int
   avatar Avatar @relation(fields: [avatarId],references: [id])
@@ -40,6 +41,7 @@ model RoomMember {
   messages Message[]
   status RoomMemberStatus @default(Active)
   joinedAt DateTime @default(now())
+  isRemoved Boolean @default(false)
   @@unique([id,userId])
   @@map("room-members")
 }
@@ -68,7 +70,7 @@ model RoomPhoto {
 
 model RoomJoinRequest {
   id Int @id @default(autoincrement())
-  userId  Int
+  userId  String
   roomId Int
   name String? @db.VarChar(20)
   avatarId Int
@@ -90,7 +92,6 @@ model  Message {
    member RoomMember @relation(fields: [memberId],references: [id],onDelete: Cascade)
    text String
    contentType MessageContentType
-   isDeleted Boolean? @default(false)
    createdAt DateTime @default(now())
    updatedAt DateTime @updatedAt
    @@map("messages")
@@ -110,6 +111,8 @@ enum RoomMemberRole {
 enum RoomMemberStatus {
   Active
   Inactive
+  Leaved
+  Removed
 }
 
 enum AvatarStatus {

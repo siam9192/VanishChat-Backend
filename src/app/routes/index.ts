@@ -18,26 +18,26 @@ const moduleRoutes: TModuleRoutes = [
     path: '/room-photos',
     router: roomPhotoRouter,
   },
-   {
+  {
     path: '/rooms',
     router: roomRouter,
   },
   {
-    path:'/room-join-requests',
-    router:roomJoinRequestRouter
-  },
-   {
-    path:'/room-members',
-    router:roomMemberRouter
+    path: '/room-join-requests',
+    router: roomJoinRequestRouter,
   },
   {
-  path:'/messages',
-  router:messageRouter
+    path: '/room-members',
+    router: roomMemberRouter,
   },
   {
-    path:'/users',
-    router:UserRouter
-  }
+    path: '/messages',
+    router: messageRouter,
+  },
+  {
+    path: '/users',
+    router: UserRouter,
+  },
 ];
 
 const routes = moduleRoutes.map((route) => router.use(route.path, route.router));

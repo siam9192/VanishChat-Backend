@@ -67,7 +67,7 @@ model RoomPhoto {
 
 model RoomJoinRequest {
   id          Int                   @id @default(autoincrement())
-  userId      Int
+  userId      String
   roomId      Int
   name        String?               @db.VarChar(20)
   avatarId    Int

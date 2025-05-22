@@ -25,7 +25,7 @@ function auth() {
     }
 
     const { role, userId, iat } = decoded;
-    req .user = decoded;
+    req.user = decoded;
 
     next();
   });

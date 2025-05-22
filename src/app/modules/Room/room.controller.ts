@@ -5,7 +5,7 @@ import { sendSuccessResponse } from '../../utils/response';
 import roomService from './room.service';
 
 class RoomController {
-  createRoom = catchAsync(async (req:Request, res:Response) => {
+  createRoom = catchAsync(async (req: Request, res: Response) => {
     const result = await roomService.createRoomIntoDB(req.user, req.body);
     sendSuccessResponse(res, {
       message: 'Room  created successfully!',

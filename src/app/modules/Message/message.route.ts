@@ -1,17 +1,11 @@
-import { Router } from "express";
-import auth from "../../middlewares/auth";
-import messageController from "./message.controller";
+import { Router } from 'express';
+import auth from '../../middlewares/auth';
+import messageController from './message.controller';
 
-const router =  Router()
+const router = Router();
 
+router.get('/:code/room', auth(), messageController.getRoomMessages);
 
-router.get('/:code/room',auth(),messageController.getRoomMessages)
+const messageRouter = router;
 
-
-
-const messageRouter = router
-
-
-export default messageRouter
-
-
+export default messageRouter;

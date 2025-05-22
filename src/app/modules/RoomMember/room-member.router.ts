@@ -1,13 +1,11 @@
-import { Router } from "express";
-import auth from "../../middlewares/auth";
-import roomMemberController from "./room-member.controller";
+import { Router } from 'express';
+import auth from '../../middlewares/auth';
+import roomMemberController from './room-member.controller';
 
-const router = Router()
+const router = Router();
 
-router.get("/:id/room",auth(),roomMemberController.getRoomMembers)
+router.get('/:id/room', auth(), roomMemberController.getRoomMembers);
 
+const roomMemberRouter = router;
 
-const roomMemberRouter =  router
-
-
-export default roomMemberRouter
+export default roomMemberRouter;

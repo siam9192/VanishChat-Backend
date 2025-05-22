@@ -134,12 +134,14 @@ exports.Prisma.RoomMemberScalarFieldEnum = {
   id: 'id',
   roomId: 'roomId',
   userId: 'userId',
+  socketId: 'socketId',
   name: 'name',
   avatarId: 'avatarId',
   isAnonymous: 'isAnonymous',
   role: 'role',
   status: 'status',
-  joinedAt: 'joinedAt'
+  joinedAt: 'joinedAt',
+  isRemoved: 'isRemoved'
 };
 
 exports.Prisma.AvatarScalarFieldEnum = {
@@ -176,7 +178,6 @@ exports.Prisma.MessageScalarFieldEnum = {
   memberId: 'memberId',
   text: 'text',
   contentType: 'contentType',
-  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -207,7 +208,9 @@ exports.RoomMemberRole = exports.$Enums.RoomMemberRole = {
 
 exports.RoomMemberStatus = exports.$Enums.RoomMemberStatus = {
   Active: 'Active',
-  Inactive: 'Inactive'
+  Inactive: 'Inactive',
+  Leaved: 'Leaved',
+  Removed: 'Removed'
 };
 
 exports.AvatarStatus = exports.$Enums.AvatarStatus = {
