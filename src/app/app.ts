@@ -8,7 +8,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import envConfig from './config/env.config';
 import { IAuthUser } from './utils/type';
 import prisma from './prisma';
-import { RoomMemberRole, RoomMemberStatus } from '../../generated/prisma';
+import { RoomJoinRequestStatus, RoomMemberRole, RoomMemberStatus } from '../../generated/prisma';
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: '*' }));
@@ -64,7 +64,6 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('connected', socket.id);
   const user = socket.data as IAuthUser;
 
   socket.on('seeking-access', async (payload) => {
@@ -105,7 +104,8 @@ io.on('connection', (socket) => {
           },
           status:{
            in:["Active","Inactive"]
-          }
+          },
+         
         },
         data: {
           status: 'Active',
@@ -298,6 +298,175 @@ io.on('connection', (socket) => {
      io.to(roomName).emit('member-removed',member.id)
   })
 
+  socket.on('leave',async (roomCode:string)=>{
+     const userId =  user.id
+    const member = await prisma.roomMember.findFirst({
+    where:{
+          userId,
+          room:{
+            code:roomCode
+          },
+          status:RoomMemberStatus.Active
+        }
+ })
+
+
+ if(!member) return
+     await prisma.roomMember.update({
+        where:{
+         id:member.id
+        },
+        data:{
+          status:"Leaved"
+        }
+     })
+     
+     const roomName =  `room_${roomCode}`;
+     socket.leave(roomCode)
+     socket.to(roomName).emit('member-leave',member.id)
+     socket.emit("leaved")
+  })
+  socket.on('close',(async(roomCode:string)=>{
+   await  prisma.room.update({
+    where:{
+      code:roomCode
+    },
+    data:{
+      status:"Closed"
+    }
+   })
+    const roomName =  `room_${roomCode}`;
+   io.to(roomName).emit("closed")
+   const room = io.sockets.adapter.rooms.get(roomName)
+   if (room) {
+  for (const socketId of room) {
+    const socket = io.sockets.sockets.get(socketId);
+    if (socket) {
+      socket.leave(roomName);
+    }
+  }
+}
+  }))
+
+  socket.on('disconnect', async(roomCode:string) => {
+  if(user.id){
+    const updated =    await prisma.roomMember.updateMany({
+      where:{
+        userId:user.id,
+        room:{
+          code:roomCode
+        }
+      },
+      data:{
+        status:'Inactive'
+      }
+     })
+      const roomName =  `room_${roomCode}`;
+     socket.to(roomName).emit("member-offline",updated)
+  }
+  });
+  
+  socket.on("current-room",async(roomCode)=>{
+   
+     const isMember = await prisma.roomMember.findFirst({
+      where: {
+        userId: user.id,
+        room: {
+          code:roomCode,
+        },
+      },
+    });
+
+    if (!isMember) {
+     return
+    }
+
+    const room = await prisma.room.findUnique({
+      where: {
+        code:roomCode,
+      },
+      include: {
+        photo: true,
+        members: {
+          where:{
+            status:{
+              notIn:[ RoomMemberStatus.Removed,RoomMemberStatus.Leaved]
+            }
+          },
+          include: {
+            avatar: true,
+          },
+         
+        },
+        joinRequests: {
+          where: {
+            status: RoomJoinRequestStatus.Pending,
+          },
+          include: {
+            avatar: true,
+          },
+        },
+        messages:{
+          include:{
+            member:{
+              include:{
+                avatar:true
+              }
+            }
+          },
+           orderBy:{
+            createdAt:'desc'
+          }
+        }
+      },
+    });
+    const messages = room?.messages .map(_=>{
+      let isOwn =  _.member.socketId ===  socket.id
+      return {
+        ..._,
+        isOwn
+      }
+    })
+
+    const isOwner =
+      room?.members.find((_) => _.userId === user.id)?.role === RoomMemberRole.Owner;
+    socket.emit("current-room-data",{...room,isOwner,messages})
+  })
+  socket.on('send-message',async (payload:{message:string,roomCode:string})=>{
+    const  member = await prisma.roomMember.findFirst({
+      where:{
+        userId:user.id,
+        status:'Active',
+        room:{
+          code:payload.roomCode,
+          status:"Open"
+        }
+      }
+    })
+    if(!member){
+      return
+    }
+
+ const message  =    await prisma.message.create({
+      data:{
+        text:payload.message,
+        roomId:member.roomId,
+        memberId:member.id,
+        contentType:'Text'
+      },
+      include:{
+        member:{
+          include:{
+            avatar:true
+          }
+        },
+        room:true
+      }
+    })
+    const roomName =  `room_${payload.roomCode}`
+    socket.to(roomName).emit('new-message',message)
+    socket.emit('new-message',{...message,isOwn:true})
+  })
 });
 
 export default app;

@@ -87,9 +87,7 @@ class RoomService {
       },
     });
 
-    if (!room) {
-      throw new AppError(httpStatus.NOT_FOUND, 'Room not found');
-    }
+    
     return room;
   }
   async getRoomByCodeFromDB(authUser: IAuthUser, code: string) {
